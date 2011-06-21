@@ -1,0 +1,6 @@
+This repository contains Brian Gladman's SHA1 & SHA2 code, (the latest release is from 7th January 2007):
+
+  http://gladman.plushost.co.uk/oldsite/cryptography_technology/sha/index.php
+
+Android support has been added by Michael Mohr; simpy clone this repository into your JNI folder and add 'sha' to your modules list.
+Further documentation can be found at the top of each source file and in the headers.
