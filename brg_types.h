@@ -150,6 +150,9 @@ extern "C" {
 #  elif defined( __WATCOMC__ )
 #    define VOID_RETURN  void __cdecl
 #    define INT_RETURN   int  __cdecl
+#  elif defined( __CUDACC__ )
+#    define VOID_RETURN  __device__ void
+#    define INT_RETURN   __device__ int
 #  else
 #    define VOID_RETURN  void
 #    define INT_RETURN   int
