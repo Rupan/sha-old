@@ -40,13 +40,13 @@ extern "C"
 #endif
 
 /* initialise the HMAC context to zero */
-void hmac_sha_begin(hmac_ctx cx[1])
+VOID_RETURN hmac_sha_begin(hmac_ctx cx[1])
 {
     memset(cx, 0, sizeof(hmac_ctx));
 }
 
 /* input the HMAC key (can be called multiple times)    */
-int hmac_sha_key(const unsigned char key[], unsigned long key_len, hmac_ctx cx[1])
+INT_RETURN hmac_sha_key(const unsigned char key[], unsigned long key_len, hmac_ctx cx[1])
 {
     if(cx->klen == HMAC_IN_DATA)                /* error if further key input   */
         return HMAC_BAD_MODE;                   /* is attempted in data mode    */
@@ -70,7 +70,7 @@ int hmac_sha_key(const unsigned char key[], unsigned long key_len, hmac_ctx cx[1
 
 /* input the HMAC data (can be called multiple times) - */
 /* note that this call terminates the key input phase   */
-void hmac_sha_data(const unsigned char data[], unsigned long data_len, hmac_ctx cx[1])
+VOID_RETURN hmac_sha_data(const unsigned char data[], unsigned long data_len, hmac_ctx cx[1])
 {   unsigned int i;
 
     if(cx->klen != HMAC_IN_DATA)                /* if not yet in data phase */
@@ -102,7 +102,7 @@ void hmac_sha_data(const unsigned char data[], unsigned long data_len, hmac_ctx 
 }
 
 /* compute and output the MAC value */
-void hmac_sha_end(unsigned char mac[], unsigned long mac_len, hmac_ctx cx[1])
+VOID_RETURN hmac_sha_end(unsigned char mac[], unsigned long mac_len, hmac_ctx cx[1])
 {   unsigned char dig[HASH_OUTPUT_SIZE];
     unsigned int i;
 
@@ -128,7 +128,7 @@ void hmac_sha_end(unsigned char mac[], unsigned long mac_len, hmac_ctx cx[1])
 }
 
 /* 'do it all in one go' subroutine     */
-void hmac_sha(const unsigned char key[], unsigned long key_len,
+VOID_RETURN hmac_sha(const unsigned char key[], unsigned long key_len,
           const unsigned char data[], unsigned long data_len,
           unsigned char mac[], unsigned long mac_len)
 {   hmac_ctx    cx[1];
