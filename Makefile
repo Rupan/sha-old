@@ -111,8 +111,8 @@ hmac.o: hmac.cu
 tests.o: tests.cu
 	$(NVCC) $(NVCCFLAGS) $(EXTRA_NVCCFLAGS) $(GENCODE_FLAGS) $(INCLUDES) -o $@ -dc $<
 
-tests: sha1.o tests.o
-	nvcc $(GENCODE_FLAGS) $(LDFLAGS) $(NVCCFLAGS) tests.o sha1.o -o tests
+tests: sha1.o sha2.o tests.o
+	nvcc $(GENCODE_FLAGS) $(LDFLAGS) $(NVCCFLAGS) tests.o sha1.o sha2.o -o tests
 
 sha: sha1.o sha1b.o sha2.o sha2b.o hmac.o
 
