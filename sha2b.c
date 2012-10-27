@@ -350,7 +350,7 @@ VOID_RETURN sha256_hash(const unsigned char data[], unsigned long len, sha256_ct
 
 /* SHA256 Final padding and digest calculation  */
 
-static void sha_end1(unsigned char hval[], sha256_ctx ctx[1], const unsigned int hlen)
+static VOID_RETURN sha_end1(unsigned char hval[], sha256_ctx ctx[1], const unsigned int hlen)
 {   uint_32t    i = (uint_32t)((ctx->count[0] >> 3) & SHA256_MASK), m1;
 
     /* put bytes in the buffer in an order in which references to   */
@@ -621,7 +621,7 @@ VOID_RETURN sha512_hash(const unsigned char data[], unsigned long len, sha512_ct
 
 /* SHA384/512 Final padding and digest calculation  */
 
-static void sha_end2(unsigned char hval[], sha512_ctx ctx[1], const unsigned int hlen)
+static VOID_RETURN sha_end2(unsigned char hval[], sha512_ctx ctx[1], const unsigned int hlen)
 {   uint_32t     i = (uint_32t)((ctx->count[0] >> 3) & SHA512_MASK);
     uint_64t     m1;
 
