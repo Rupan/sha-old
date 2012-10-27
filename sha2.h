@@ -47,6 +47,12 @@
 #  define NEED_UINT_64T
 #endif
 
+#if defined( __CUDACC__ )
+#define TARGET __device__
+#else
+#define TARGET
+#endif
+
 #include "brg_types.h"
 
 #if defined(__cplusplus)
