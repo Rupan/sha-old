@@ -48,6 +48,12 @@ extern "C" {
 
 #include <limits.h>
 
+#if defined( __CUDACC__ )
+#  define CUDA_TARGET __device__
+#else
+#  define CUDA_TARGET
+#endif
+
 #ifndef BRG_UI8
 #  define BRG_UI8
 #  if UCHAR_MAX == 255u
@@ -151,8 +157,8 @@ extern "C" {
 #    define VOID_RETURN  void __cdecl
 #    define INT_RETURN   int  __cdecl
 #  elif defined( __CUDACC__ )
-#    define VOID_RETURN  __device__ void
-#    define INT_RETURN   __device__ int
+#    define VOID_RETURN  void CUDA_TARGET
+#    define INT_RETURN   int CUDA_TARGET
 #  else
 #    define VOID_RETURN  void
 #    define INT_RETURN   int
