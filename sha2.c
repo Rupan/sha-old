@@ -73,7 +73,7 @@
  on big-endian systems and for his assistance with corrections
 */
 
-#if 0
+#if 1
 #define UNROLL_SHA2     /* for SHA2 loop unroll     */
 #endif
 
