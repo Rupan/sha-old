@@ -35,13 +35,20 @@ __global__ void kernel_sha2(unsigned char *hval) {
 int main( void ) {
   int device_count;
   unsigned int i, j, blocks, offset;
+  float sha1_elapsed, sha256_elapsed;
   cudaError_t err;
+  cudaEvent_t start, stop;
   cudaDeviceProp prop;
   unsigned char *host_hval;
   unsigned char *device_hval;
 
+  err = cudaEventCreate(&start);
+  if(err != cudaSuccess) { }
+  err = cudaEventCreate(&stop);
+  if(err != cudaSuccess) { }
+
   err = cudaGetDeviceCount(&device_count);
-  if(err != cudaSuccess) {}
+  if(err != cudaSuccess) { }
   if(device_count == 0) {
     printf("Device not found.\n");
     return 1;
@@ -82,7 +89,15 @@ int main( void ) {
     free(host_hval);
     return 1;
   }
+  err = cudaEventRecord(start, 0);
+  if(err != cudaSuccess) { }
   kernel_sha1<<<blocks,THREAD_COUNT>>>(device_hval);
+  err = cudaEventRecord(stop, 0);
+  if(err != cudaSuccess) { }
+  err = cudaEventSynchronize(stop);
+  if(err != cudaSuccess) { }
+  err = cudaEventElapsedTime(&sha1_elapsed, start, stop);
+  if(err != cudaSuccess) { }
   err = cudaMemcpy(host_hval, device_hval, N*SHA1_DIGEST_SIZE, cudaMemcpyDeviceToHost);
   if(err != cudaSuccess) {
     printf("SHA1: cudaMemcpy failed.\n");
@@ -112,7 +127,15 @@ int main( void ) {
     free(host_hval);
     return 1;
   }
+  err = cudaEventRecord(start, 0);
+  if(err != cudaSuccess) { }
   kernel_sha2<<<blocks,THREAD_COUNT>>>(device_hval);
+  cudaEventRecord(stop, 0);
+  if(err != cudaSuccess) { }
+  err = cudaEventSynchronize(stop);
+  if(err != cudaSuccess) { }
+  err = cudaEventElapsedTime(&sha256_elapsed, start, stop);
+  if(err != cudaSuccess) { }
   err = cudaMemcpy(host_hval, device_hval, N*SHA256_DIGEST_SIZE, cudaMemcpyDeviceToHost);
   if(err != cudaSuccess) {
     printf("SHA256: cudaMemcpy failed.\n");
@@ -131,11 +154,19 @@ int main( void ) {
     printf("\n");
   }
 
+  printf("Timers: SHA1 = %5.3f ms; SHA256 = %5.3f ms\n", sha1_elapsed, sha256_elapsed);
+
   /* clean up */
   err = cudaFree(device_hval);
   if(err != cudaSuccess) {
     printf("FINAL: Failed to free device memory.\n");
   }
+  err = cudaEventDestroy(start);
+  if(err != cudaSuccess)
+    printf("FINAL: Unable to destroy start event");
+  err = cudaEventDestroy(stop);
+  if(err != cudaSuccess)
+    printf("FINAL: Unable to destroy stop event");
   device_hval = NULL;
   free(host_hval);
   host_hval = NULL;
