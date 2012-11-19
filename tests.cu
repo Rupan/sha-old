@@ -59,7 +59,7 @@ int main( void ) {
     printf("Failed to get device properties.\n");
     return 1;
   }
-  blocks = prop.multiProcessorCount * 2;
+  blocks = prop.multiProcessorCount * 6;
 
   /* allocate enough memory for the largest output required */
   host_hval = (unsigned char *)malloc(N*SHA256_DIGEST_SIZE);
